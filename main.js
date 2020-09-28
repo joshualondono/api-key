@@ -9,39 +9,44 @@ const readlineSync = require('readline-sync');
   const right = ['foxnews.com'];
 
 //OBJECT QUERY
-  const makeQuery = (source) => {
+  const makeQuery = (term, source) => {
 
     const objQuery = {}
 
   if (source === 'Left'){
-    const newQuery = Object.create(objQuery);
-    newQuery.q = 'election';
-    newQuery.sources = [...left].toString();
-    newQuery.sortBy = 'relevancy';
-    console.log(newQuery);
+    // const newQuery = Object.create(objQuery);
+    // newQuery.q = 'election';
+    // newQuery.sources = [...left].toString();
+    // newQuery.sortBy = 'relevancy';
+    const newQuery = newsapi.v2.everything({
+  q: term,
+  domains: [...left].toString(),
+  language: 'en',
+  sortBy: 'relevancy',
+}).then(response => {
+      console.log(response);
+    });
+    return newQuery
+
   } else {
-    const newQuery = Object.create(objQuery);
-    newQuery.q = 'election';
-    newQuery.sources = [...right].toString();
-    newQuery.sortBy = 'relevancy';
-    console.log(newQuery);
-  }
+    // const newQuery = Object.create(objQuery);
+    // newQuery.q = 'election';
+    // newQuery.sources = [...right].toString();
+    // newQuery.sortBy = 'relevancy';
+    const newQuery = newsapi.v2.everything({
+  q: term,
+  domains: [...right].toString(),
+  language: 'en',
+  sortBy: 'relevancy',
+}).then(response => {
+      console.log(response);
+    });
+    return newQuery
+   }
 };
 
   //USER INPUT
-
-  // const userInput = ()
     const index = readlineSync.keyInSelect(bias, 'Set Your Bias Index?');
-    const query = makeQuery(bias[index]);
+    const query = makeQuery('election',bias[index]);
 
-    const apiCall = (search) => {
-    newsapi.v2.everything(search).then(response => {
-      console.log(response);
-    });
-  };
-
-    console.log(apiCall(query));
-
-    //apiCall(query);
-
-  //API CALL
+console.log(query)
